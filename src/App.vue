@@ -10,7 +10,9 @@
           actions
       >
         <template v-slot:create-button>
-          <a href="www.google.com" class="btn btn-primary">Google</a>
+          <div class="col-md-auto pl-0">
+            <a href="www.google.com" class="btn btn-primary">Google</a>
+          </div>
         </template>
 
         <template v-slot:advance-filter>
