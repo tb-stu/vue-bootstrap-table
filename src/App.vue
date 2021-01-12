@@ -178,7 +178,9 @@ export default {
         }
       }
 
-      this.$refs.table.callApi()
+      setTimeout(() => {
+        this.$refs.table.callApi()
+      })
     },
 
     changeStatus(row) {

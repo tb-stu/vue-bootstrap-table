@@ -73,7 +73,7 @@
               </th>
 
               <th
-                  v-if="!!actions"
+                  v-if="!!actions || !!edit_url || !!delete_url"
                   style="width: 50px;"
                   class="bg-white"
               ></th>
@@ -411,6 +411,9 @@ export default {
         per_page: this.per_page,
         ...this.filters,
       }
+
+      console.info('use_advance_filters', this.use_advance_filters)
+      console.info('advance_filters', JSON.stringify(this.advance_filters))
 
       if (this.use_advance_filters) {
         params = {
