@@ -8,6 +8,7 @@
           ref="table"
           :headers="headers"
           :advance_filters="advance_filters"
+          :use_advance_filters="use_advance_filters"
           edit_url="ascascascas"
           delete_url="ascacas"
       >
@@ -161,12 +162,15 @@ export default {
         date: null,
         status: 1,
       },
+      use_advance_filters: false,
     }
   },
 
   methods: {
     goSearch(use_advance_filters) {
-      if (!use_advance_filters) {
+      this.use_advance_filters = use_advance_filters
+
+      if (!this.use_advance_filters) {
         // Reset advance filters
         this.advance_filters = {
           date: null,
@@ -174,7 +178,7 @@ export default {
         }
       }
 
-      this.$refs.table.callApi(use_advance_filters)
+      this.$refs.table.callApi()
     },
 
     changeStatus(row) {
@@ -187,7 +191,7 @@ export default {
 
     goFilter() {
       this.$refs.table2.goFilter()
-    }
+    },
   },
 }
 </script>

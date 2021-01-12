@@ -283,6 +283,11 @@ export default {
         return {}
       },
     },
+    use_advance_filters: {
+      type: Boolean,
+      require: false,
+      default: false,
+    },
     row_click: {
       type: Function,
       require: false,
@@ -334,7 +339,6 @@ export default {
       sort_desc: false,
       timeout: null,
       old_filters: _.clone(this.filters),
-      use_advance_filters: false,
     }
   },
 
@@ -389,9 +393,7 @@ export default {
       }
     },
 
-    callApi(use_advance_filters = false) {
-      this.use_advance_filters = use_advance_filters
-
+    callApi() {
       let sort_text = this.sort_key
       let sort_desc = null
 
