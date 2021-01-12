@@ -2,13 +2,14 @@
   <div id="app">
 
     <div class="container py-3">
+      <h2>Example 1</h2>
       <v-table
           api="http://etda-threatwatch.test/users"
           ref="table"
           :headers="headers"
+          :advance_filters="advance_filters"
           edit_url="ascascascas"
           delete_url="ascacas"
-          actions
       >
         <template v-slot:create-button>
           <div class="col-md-auto pl-0">
@@ -17,7 +18,7 @@
           </div>
         </template>
 
-        <template v-slot:advance-filter>
+        <template v-slot:advance-filters>
           <div class="row">
             <div class="col-md-4">
               <v-datepicker
@@ -33,10 +34,18 @@
             <div class="col-md-auto">
               <button
                   type="button"
-                  class="btn btn-primary"
-                  @click="goSearch"
+                  class="btn btn-primary mr-2"
+                  @click="goSearch(true)"
               >
                 ค้นหา
+              </button>
+
+              <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="goSearch(false)"
+              >
+                Reset
               </button>
             </div>
           </div>
@@ -48,8 +57,61 @@
             <option :value="1">1</option>
           </select>
         </template>
+      </v-table>
+
+
+      <h2 class="mt-5">Example 2</h2>
+      <v-table
+          api="http://etda-threatwatch.test/users"
+          ref="table2"
+          :headers="headers"
+          :filters="filters"
+          actions
+      >
+        <template v-slot:filters>
+          <div class="row justify-content-end">
+            <div class="col-sm-6 col-md-4 mb-2">
+              <select v-model="filters.status" class="custom-select">
+                <option :value="0">0</option>
+                <option :value="1">1</option>
+              </select>
+            </div>
+
+            <div class="col-sm-6 col-md-4 mb-2">
+
+              <div class="input-group">
+                <input
+                    v-model="filters.search"
+                    class="form-control"
+                    type="text"
+                    placeholder="ค้นหา"
+                    aria-label="ค้นหา"
+                    aria-describedby="search-btn"
+                />
+                <div class="input-group-append">
+                  <button id="search-btn" class="btn" type="button" @click="goFilter">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="col-md-auto">
+              <a href="https://www.google.com" class="btn btn-primary mr-2">Google</a>
+              <button class="btn btn-info" @click="doSomething">Something</button>
+            </div>
+          </div>
+
+        </template>
 
         <template v-slot:td(actions)="{ row }">
+          <button
+              class="btn btn-sm btn-secondary"
+              @click="doSomething"
+          >
+            doSomething
+          </button>
         </template>
       </v-table>
     </div>
@@ -92,6 +154,9 @@ export default {
           width: 80,
         },
       ],
+      filters: {
+        status: 1,
+      },
       advance_filters: {
         date: null,
         status: 1,
@@ -100,8 +165,16 @@ export default {
   },
 
   methods: {
-    goSearch() {
-      this.$refs.table.callApi(this.advance_filters)
+    goSearch(use_advance_filters) {
+      if (!use_advance_filters) {
+        // Reset advance filters
+        this.advance_filters = {
+          date: null,
+          status: 1,
+        }
+      }
+
+      this.$refs.table.callApi(use_advance_filters)
     },
 
     changeStatus(row) {
@@ -111,6 +184,10 @@ export default {
     doSomething() {
       alert('doSomething')
     },
+
+    goFilter() {
+      this.$refs.table2.goFilter()
+    }
   },
 }
 </script>

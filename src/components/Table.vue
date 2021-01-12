@@ -1,6 +1,6 @@
 <template>
   <div :class="div_1_class ">
-    <slot v-if="show_filter" name="filter">
+    <slot v-if="show_filter" name="filters">
       <div class="row justify-content-end">
         <div class="col-sm-6 col-md-4 mb-2">
 
@@ -25,7 +25,7 @@
       </div>
     </slot>
 
-    <slot name="advance-filter"></slot>
+    <slot name="advance-filters"></slot>
 
     <div :class="div_2_class">
       <div class="table-responsive position-relative">
@@ -276,6 +276,13 @@ export default {
         }
       },
     },
+    advance_filters: {
+      type: Object,
+      require: false,
+      default: () => {
+        return {}
+      },
+    },
     row_click: {
       type: Function,
       require: false,
@@ -327,6 +334,7 @@ export default {
       sort_desc: false,
       timeout: null,
       old_filters: _.clone(this.filters),
+      use_advance_filters: false,
     }
   },
 
@@ -381,7 +389,9 @@ export default {
       }
     },
 
-    callApi(advance_filters = {}) {
+    callApi(use_advance_filters = false) {
+      this.use_advance_filters = use_advance_filters
+
       let sort_text = this.sort_key
       let sort_desc = null
 
@@ -398,7 +408,13 @@ export default {
         page: this.page,
         per_page: this.per_page,
         ...this.filters,
-        ...advance_filters,
+      }
+
+      if (this.use_advance_filters) {
+        params = {
+          ...params,
+          ...this.advance_filters,
+        }
       }
 
       this.old_filters = _.clone(this.filters)
@@ -419,7 +435,11 @@ export default {
 
     goFilter(e) {
       if (
-          (e.type === 'click' || e.keyCode === 13)
+          (
+              typeof e === 'undefined'
+              || e.type === 'click'
+              || e.keyCode === 13
+          )
           && !!this.filters.search
       ) {
         if (!!this.timeout) {
