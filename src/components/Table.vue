@@ -23,14 +23,14 @@
         </div>
         <slot name="create-button"></slot>
       </div>
-
-      <slot name="advance-filter"></slot>
     </slot>
 
+    <slot name="advance-filter"></slot>
+
     <div :class="div_2_class">
-      <div class="table-responsive" :class="{ 'heightTable': (data.data.length === 1) }">
+      <div class="table-responsive position-relative">
         <div v-if="loading" class="table-loading d-flex justify-content-end">
-          <div class="spinner-border text-info" role="status">
+          <div class="spinner-border text-primary" role="status">
             <span class="sr-only">Loading...</span>
           </div>
         </div>
@@ -157,12 +157,12 @@
 
       <v-pagination
           v-if="!!data.links && !!data.meta"
+          v-model="per_page"
           :links="data.links"
           :meta="data.meta"
           :text_class="paginate_text_class"
           :paginate_justify_class="paginate_justify_class"
           @gotoPage="changePage"
-          @changePerPage="per_page = $event"
       ></v-pagination>
     </div>
 
@@ -381,7 +381,7 @@ export default {
       }
     },
 
-    callApi() {
+    callApi(advance_filters = {}) {
       let sort_text = this.sort_key
       let sort_desc = null
 
@@ -398,6 +398,7 @@ export default {
         page: this.page,
         per_page: this.per_page,
         ...this.filters,
+        ...advance_filters,
       }
 
       this.old_filters = _.clone(this.filters)

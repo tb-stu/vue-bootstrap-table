@@ -84,6 +84,10 @@ export default {
   name: 'v-pagination',
 
   props: {
+    value: {
+      type: Number,
+      require: true,
+    },
     links: {
       type: Object,
       require: true,
@@ -106,7 +110,7 @@ export default {
 
   data() {
     return {
-      per_page: 10,
+      per_page: this.value,
     }
   },
 
@@ -174,7 +178,7 @@ export default {
 
   watch: {
     per_page: function (per_page) {
-      this.$emit('changePerPage', per_page)
+      this.$emit('input', per_page)
     },
   },
 }
